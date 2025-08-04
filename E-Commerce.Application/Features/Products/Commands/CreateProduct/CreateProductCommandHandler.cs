@@ -18,9 +18,11 @@ internal class CreateProductCommandHandler(IMapper mapper,
 			throw new NotFoundException(nameof(Category), request.CategoryId.ToString());
 
 		var product = mapper.Map<Product>(request);
-
-		var fileUrl = await cloudinaryService.UploadFileAsync(request.CoverImageFile, "Products");
-		product.CoverImageUrl = fileUrl;
+		if (request.CoverImageFile is not null)
+		{
+			var fileUrl = await cloudinaryService.UploadFileAsync(request.CoverImageFile, "Products");
+			product.CoverImageUrl = fileUrl;
+		}
 
 		await unitOfWork.Products.CreateAsync(product);
 		await unitOfWork.SaveChangesAsync();

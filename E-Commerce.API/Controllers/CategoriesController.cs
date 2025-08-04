@@ -3,12 +3,15 @@ using E_Commerce.Application.Features.Categories.Commands.DeleteCategory;
 using E_Commerce.Application.Features.Categories.Commands.UpdateCategory;
 using E_Commerce.Application.Features.Categories.Queries.GetAllCategories;
 using E_Commerce.Application.Features.Categories.Queries.GetCategoryById;
+using E_Commerce.Domain.Constants;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace E_Commerce.API.Controllers;
 [Route("api/[controller]")]
 [ApiController]
+[Authorize(Roles = AppRoles.Admin)]
 public class CategoriesController(IMediator mediator) : ControllerBase
 {
 	[HttpGet]

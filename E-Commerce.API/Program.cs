@@ -1,28 +1,27 @@
+using E_Commerce.API.Extensions;
+using E_Commerce.API.Middlewares;
 using E_Commerce.Application.Extensions;
+using E_Commerce.Domain.Entities;
+using E_Commerce.Infrastructure.Data.Seeds;
 using E_Commerce.Infrastructure.Extensions;
+using Microsoft.AspNetCore.Identity;
 namespace E_Commerce.API
 {
 	public class Program
 	{
-		public static void Main(string[] args)
+		public static async Task Main(string[] args)
 		{
 			var builder = WebApplication.CreateBuilder(args);
 
-			// Add services to the container.
-
-			builder.Services.AddControllers();
-			// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-			builder.Services.AddEndpointsApiExplorer();
-			builder.Services.AddSwaggerGen();
-
-
+			builder.AddPresentaion();
 			builder.Services
 				.AddApplication()
 				.AddInfrastructure(builder.Configuration);
 
 			var app = builder.Build();
 
-			// Configure the HTTP request pipeline.
+			app.UseMiddleware<ErrorHandlingMiddleware>();
+
 			if (app.Environment.IsDevelopment())
 			{
 				app.UseSwagger();
@@ -33,6 +32,16 @@ namespace E_Commerce.API
 
 			app.UseAuthorization();
 
+			#region Seed Roles and Users
+			var scopeFactory = app.Services.GetRequiredService<IServiceScopeFactory>();
+			using var scope = scopeFactory.CreateScope();
+
+			var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+			var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+
+			await DefaultRoles.SeedRoles(roleManager);
+			await DefaultUsers.SeedUsers(userManager);
+			#endregion
 
 			app.MapControllers();
 
