@@ -12,11 +12,11 @@ internal class ProductRepository : GenericRepository<Product>, IProductRepositor
 	{
 	}
 
-	public async Task<IEnumerable<Product>> GetAllWithCategory()
+	public async Task<Product?> GetByIdWithCategory(int id)
 	{
 		return await _context.Products
 			.Include(p => p.Category)
-			.ToListAsync();
+			.FirstOrDefaultAsync(p => p.Id == id);
 	}
 
 	public async Task<(int, IEnumerable<Product>)> GetAllMatchingAsync(int pageNumber, int pageSize, string? search, string? sortBy, SortDirection sortDirection)
