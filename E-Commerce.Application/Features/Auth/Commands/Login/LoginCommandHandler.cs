@@ -15,9 +15,17 @@ internal class LoginCommandHandler(UserManager<ApplicationUser> userManager,
 		if (user == null)
 			throw new UnauthorizedAccessException("Invalid email or password.");
 
+
+
 		var result = await signInManager.CheckPasswordSignInAsync(user, request.Password, false);
 		if (!result.Succeeded)
+		{
+			if (result.IsNotAllowed)
+				throw new UnauthorizedAccessException("You must confirm your email before logging in.");
+
 			throw new UnauthorizedAccessException("Invalid email or password.");
+
+		}
 
 		var role = await userManager.GetRolesAsync(user);
 		var token = tokenService.GenerateToken(user, role.First());

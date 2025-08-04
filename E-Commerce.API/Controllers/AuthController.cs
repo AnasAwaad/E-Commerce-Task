@@ -1,4 +1,5 @@
-﻿using E_Commerce.Application.Features.Auth.Commands.Login;
+﻿using E_Commerce.Application.Features.Auth.Commands.ConfirmEmail;
+using E_Commerce.Application.Features.Auth.Commands.Login;
 using E_Commerce.Application.Features.Auth.Commands.Register;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -31,4 +32,14 @@ public class AuthController : ControllerBase
 
 		return Ok(result);
 	}
+
+	[HttpGet("confirm-email")]
+	public async Task<IActionResult> ConfirmEmail([FromQuery] string userEmail, [FromQuery] string token)
+	{
+		var command = new ConfirmEmailCommand(userEmail, token);
+		await _mediator.Send(command);
+
+		return Ok("Email confirmed successfully");
+	}
+
 }

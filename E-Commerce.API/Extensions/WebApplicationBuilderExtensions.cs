@@ -53,11 +53,12 @@ public static class WebApplicationBuilderExtensions
 			options.Password.RequireUppercase = true;
 			options.Password.RequireDigit = true;
 			options.Password.RequiredLength = 6;
-
+			options.SignIn.RequireConfirmedEmail = true;
 			options.User.RequireUniqueEmail = true;
 
 
-		}).AddEntityFrameworkStores<ApplicationDbContext>();  // add classes that implement interfaces
+		}).AddEntityFrameworkStores<ApplicationDbContext>()
+		.AddDefaultTokenProviders();
 
 		builder.Services.AddAuthentication(options =>
 		{
