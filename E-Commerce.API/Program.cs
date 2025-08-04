@@ -1,5 +1,5 @@
+using E_Commerce.Application.Extensions;
 using E_Commerce.Infrastructure.Extensions;
-
 namespace E_Commerce.API
 {
 	public class Program
@@ -16,7 +16,9 @@ namespace E_Commerce.API
 			builder.Services.AddSwaggerGen();
 
 
-			builder.Services.AddInfrastructure(builder.Configuration);
+			builder.Services
+				.AddApplication()
+				.AddInfrastructure(builder.Configuration);
 
 			var app = builder.Build();
 
