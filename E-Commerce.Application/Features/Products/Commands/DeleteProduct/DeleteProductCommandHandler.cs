@@ -1,11 +1,10 @@
-﻿using AutoMapper;
-using E_Commerce.Application.Interfaces;
+﻿using E_Commerce.Application.Interfaces;
 using E_Commerce.Domain.Entities;
 using E_Commerce.Domain.Exceptions;
 using MediatR;
 
 namespace E_Commerce.Application.Features.Products.Commands.DeleteProduct;
-internal class DeleteProductCommandHandler(IUnitOfWork unitOfWork, IMapper mapper) : IRequestHandler<DeleteProductCommand>
+internal class DeleteProductCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<DeleteProductCommand>
 {
 	public async Task Handle(DeleteProductCommand request, CancellationToken cancellationToken)
 	{
